@@ -1,0 +1,33 @@
+version: "2"
+services:
+  app:
+    image: ruby:2.2.5
+    ports:
+      - '3000:3000'
+    environment:
+      APP_ROOT: /app
+      RAILS_ENV: development
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: password
+      MYSQL_HOST: mysql
+    links:
+      - mysql
+    volumes:
+      - .:/app
+      - app-tmp:/app/tmp
+    command: /app/bin/docker-rails
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
+    driver: local
+  app-tmp:
+    driver: local

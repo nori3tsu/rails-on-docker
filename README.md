@@ -1,24 +1,69 @@
-# README
+# Rails On Docker
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a simple project of Docker and Rails for development.
 
-Things you may want to cover:
+## Requirements
 
-* Ruby version
+* [Docker for Mac](https://docs.docker.com/docker-for-mac/)
 
-* System dependencies
+## Application Versions
 
-* Configuration
+The application versions in the docker container are the following:
 
-* Database creation
+* Ruby 2.2.5
+* Rails 5~
 
-* Database initialization
+## Features
 
-* How to run the test suite
+This Docker and Docker Compose settings support the following:
 
-* Services (job queues, cache servers, search engines, etc.)
+* Persistant database (MySQL)
+* Persistant application log files
+* Detect file changes from localhost
 
-* Deployment instructions
+## Usage
 
-* ...
+### Start the application
+
+```
+$ docker-compose up
+
+$ open http://localhost:3000
+```
+
+### Invoke rails commands
+
+For invoking rails commands, you should enter the docker container.
+
+Examples:
+
+```
+$ docker-compose exec app bash
+
+root@2987c7ab1b82:/# cd /app
+root@2987c7ab1b82:/app# bundle exec rails generate scaffold page name:string title:string
+root@2987c7ab1b82:/app# bundle exec rake db:migrate
+root@2987c7ab1b82:/app# exit
+
+$ open http://localhost:3000/pages
+```
+
+### Connect to the database
+
+```
+$ docker-compose exec mysql mysql -uroot -p
+Enter password: # The default password is written in docker-compose.yml.
+
+mysql> show databases;
++-----------------------------+
+| Database                    |
++-----------------------------+
+| information_schema          |
+| mysql                       |
+| performance_schema          |
+| rails-on-docker_development |
+| rails-on-docker_test        |
+| sys                         |
++-----------------------------+
+6 rows in set (0.00 sec)
+```
